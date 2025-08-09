@@ -32,7 +32,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build and push NGA.Consumer image
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v5
         with:
           push: true
           tags: jfwangncs/javawebapi:${{ github.run_number }}
