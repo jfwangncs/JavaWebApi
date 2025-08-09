@@ -19,6 +19,9 @@
 *.tar.gz
 *.rar
 
+# 允许 gradle-wrapper.jar 被跟踪（CI/CD 必须）
+!gradle/wrapper/gradle-wrapper.jar
+
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 replay_pid*
