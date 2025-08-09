@@ -5,7 +5,7 @@ FROM eclipse-temurin:21-jdk
 WORKDIR /app
 
 # 复制构建产物（假设 jar 包路径如下，如有不同请修改）
-COPY build/libs/*.jar app.jar
+COPY app/build/libs/*.jar app.jar
 
 # 暴露端口（如有不同请修改）
 EXPOSE 8080
