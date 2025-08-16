@@ -38,3 +38,19 @@ jobs:
           context: .
           push: true
           tags: jfwangncs/javawebapi:${{ github.run_number }}
+  deploy:
+    needs: docker
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - name: SSH into server and deploy container
+        uses: appleboy/ssh-action@master
+        with:
+          host: jfwang.xiaofengyu.com
+          port: 8033
+          username: jfwang
+          password: ${{ secrets.SERVER_SSH_PASSWORD }}
+          script: |
+            export PATH=$PATH:/usr/local/bin:/usr/bin:/bin
+            sudo docker rm javaapi -f && sudo docker run -d -p 8008:5000 --name javaapi jfwangncs/javawebapi:${{ github.run_number }}
