@@ -12,13 +12,13 @@ import jfwang.api.model.BaseResponse;
 
 @RestController
 @RequestMapping
-public class Version {
+public class Version extends CustomBaseController {
 
     private static final Logger logger = LoggerFactory.getLogger(Version.class);
 
     @GetMapping("/version")
     public ResponseEntity<BaseResponse<String>> version() {
         logger.info("测试abc123");
-        return BaseResponse.Bad(ErrorCode.OUTOFSTOCK);
+        return Bad(ErrorCode.OUTOFSTOCK);
     }
 }

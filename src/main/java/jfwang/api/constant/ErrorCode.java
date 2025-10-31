@@ -2,6 +2,7 @@ package jfwang.api.constant;
 
 public enum ErrorCode {
     SYSTEM_ERROR("1000", "System error"),
+    VALIDATION_ERROR("1000", "Validation error"),
     OUTOFSTOCK("1001", "The product is out of stock."),;
 
     private final String code;

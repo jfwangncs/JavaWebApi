@@ -3,7 +3,8 @@ package jfwang.api.constant;
 public enum ResponseCode {
     SUCCESS("200", "success"),
     PENDING("300", "pending"),
-    FAILED("400", "failed");
+    FAILED("400", "failed"),
+    ERROR("500", "error");
 
     private final String code;
     private final String defaultMsg;

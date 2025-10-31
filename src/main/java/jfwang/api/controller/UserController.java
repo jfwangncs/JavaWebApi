@@ -1,21 +1,32 @@
 package jfwang.api.controller;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import jfwang.api.entity.User;
-import jfwang.api.mapper.UserMapper;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.RequiredArgsConstructor;
+import java.time.LocalDateTime;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.time.LocalDateTime;
-import java.util.List;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+
+import cn.dev33.satoken.annotation.SaCheckLogin;
+import cn.dev33.satoken.annotation.SaCheckPermission;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jfwang.api.entity.User;
+import jfwang.api.mapper.UserMapper;
+import lombok.RequiredArgsConstructor;
 
 /**
  * 用户管理控制器
@@ -31,6 +42,7 @@ public class UserController {
     private final UserMapper userService;
 
     @Operation(summary = "获取用户列表", description = "分页查询用户列表")
+    @SaCheckLogin
     @GetMapping
     public ResponseEntity<Page<User>> getUserList(
             @Parameter(description = "页码", example = "1") @RequestParam(value = "current", defaultValue = "1") Integer current,
@@ -42,6 +54,7 @@ public class UserController {
     }
 
     @Operation(summary = "根据ID获取用户", description = "根据用户ID获取用户详情")
+    @SaCheckLogin
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(
             @Parameter(description = "用户ID", example = "1") @PathVariable("id") Integer id) {
@@ -53,6 +66,8 @@ public class UserController {
     }
 
     @Operation(summary = "创建用户", description = "创建新用户")
+    @SaCheckLogin
+    @SaCheckPermission("user:add")
     @PostMapping
     public ResponseEntity<User> createUser(@RequestBody User user) {
         user.setCreatedTime(LocalDateTime.now());
@@ -63,6 +78,8 @@ public class UserController {
     }
 
     @Operation(summary = "更新用户", description = "根据ID更新用户信息")
+    @SaCheckLogin
+    @SaCheckPermission("user:edit")
     @PutMapping("/{id}")
     public ResponseEntity<User> updateUser(
             @Parameter(description = "用户ID", example = "1") @PathVariable("id") int id,
@@ -78,6 +95,8 @@ public class UserController {
     }
 
     @Operation(summary = "删除用户", description = "根据ID删除用户")
+    @SaCheckLogin
+    @SaCheckPermission("user:delete")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(
             @Parameter(description = "用户ID", example = "1") @PathVariable("id") Long id) {
@@ -90,6 +109,8 @@ public class UserController {
     }
 
     @Operation(summary = "批量删除用户", description = "根据ID列表批量删除用户")
+    @SaCheckLogin
+    @SaCheckPermission("user:delete")
     @DeleteMapping("/batch")
     public ResponseEntity<Void> batchDeleteUsers(@RequestBody List<Long> ids) {
         userService.deleteByIds(ids);
@@ -97,6 +118,7 @@ public class UserController {
     }
 
     @Operation(summary = "根据用户名查询用户", description = "根据用户名查询用户信息")
+    @SaCheckLogin
     @GetMapping("/username/{username}")
     public ResponseEntity<User> getUserByUsername(
             @Parameter(description = "用户名", example = "admin") @PathVariable("username") String username) {
